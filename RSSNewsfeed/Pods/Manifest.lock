@@ -1,0 +1,20 @@
+PODS:
+  - SwiftLint (0.31.0)
+  - SWRevealViewController (2.3.0)
+
+DEPENDENCIES:
+  - SwiftLint
+  - SWRevealViewController
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SwiftLint
+    - SWRevealViewController
+
+SPEC CHECKSUMS:
+  SwiftLint: 7a0227733d786395817373b2d0ca799fd0093ff3
+  SWRevealViewController: 6d3fd97f70112fd7cef9de14df4260eacce4c63a
+
+PODFILE CHECKSUM: 4ae66d6fb65fc750c89147c0fd5ec65b457c2b6f
+
+COCOAPODS: 1.5.3
