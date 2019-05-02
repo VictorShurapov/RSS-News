@@ -8,4 +8,5 @@ target 'RSSNewsfeed' do
   # Pods for RSSNewsfeed
 pod 'SwiftLint'
 pod 'SWRevealViewController'
+
 end
