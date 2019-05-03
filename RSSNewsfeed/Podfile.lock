@@ -1,20 +1,24 @@
 PODS:
+  - Kingfisher (5.4.0)
   - SwiftLint (0.32.0)
   - SWRevealViewController (2.3.0)
 
 DEPENDENCIES:
+  - Kingfisher
   - SwiftLint
   - SWRevealViewController
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Kingfisher
     - SwiftLint
     - SWRevealViewController
 
 SPEC CHECKSUMS:
+  Kingfisher: 9c8f2cc6710334e06f32ba2b45e77707d5e2f0c9
   SwiftLint: 009a898ef2a1c851f45e1b59349bf6ff2ddc990d
   SWRevealViewController: 6d3fd97f70112fd7cef9de14df4260eacce4c63a
 
-PODFILE CHECKSUM: eb8f0b4c5933210339815beaad8b2e027746747e
+PODFILE CHECKSUM: 559de7f76caf3cc2e2b20688e1b7372d584ecb47
 
 COCOAPODS: 1.5.3
