@@ -30,14 +30,15 @@ class NewsFeedViewController: UIViewController {
         menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
-        self.navigationItem.title = viewModel.currentNewsChannelSource
+        self.navigationItem.title = viewModel.currentChannelName
         
         xmlParse()
 }
     
     func xmlParse() {
         
-        guard let url = URL(string: "https://www.wired.com/feed/rss") else { return }
+        guard let url = URL(string: viewModel.currentNewsChannelSource) else { return }
+
         xmlParser = NewsFeedXMLParser()
         xmlParser.delegate = self
         xmlParser.startParsingWithContentsOfURL(rssURL: url)
@@ -85,7 +86,7 @@ extension NewsFeedViewController: UITableViewDataSource {
         }
 
         newsFeedCell.newsTitle.text = currentDictionary["title"]
-                
+        
         return newsFeedCell
     }
 }
