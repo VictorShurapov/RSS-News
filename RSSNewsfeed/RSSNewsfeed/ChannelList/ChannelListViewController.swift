@@ -31,8 +31,11 @@ class ChannelListViewController: UIViewController {
                 if let newsFeedViewController = navigationController.viewControllers.last as? NewsFeedViewController {
                     guard let selectedChannelIndex = tableView.indexPathForSelectedRow else { return }
                     
+                    let selectedChannelName = viewModel.channelList[selectedChannelIndex.row]
                     let selectedChannelSource = viewModel.channelSource[selectedChannelIndex.row]
+
                     
+                    newsFeedViewController.viewModel.currentChannelName = selectedChannelName
                     newsFeedViewController.viewModel.currentNewsChannelSource = selectedChannelSource
                 }
             }

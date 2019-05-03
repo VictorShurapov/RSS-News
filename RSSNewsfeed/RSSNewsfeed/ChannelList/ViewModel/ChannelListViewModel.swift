@@ -11,7 +11,7 @@ import UIKit
 class ChannelListViewModel {
 
     // MARK: - Properties
-    var channelList = ["News1", "News2", "News3", "News4", "News5", "News6", "News7"]
+    var channelList = ["Wired", "New Yorker.Daily Cartoon", "Buzzfeed", "Time", "NYTimes"]
     
-    var channelSource = ["News1Source", "News2Source", "News3Source", "News4Source", "News5Source", "News6Source", "News7Source"]
+    var channelSource = ["https://www.wired.com/feed/rss", "https://www.newyorker.com/feed/cartoons/daily-cartoon", "https://www.buzzfeed.com/world.xml", "http://feeds.feedburner.com/time/world", "http://rss.nytimes.com/services/xml/rss/nyt/US.xml"]
 }
