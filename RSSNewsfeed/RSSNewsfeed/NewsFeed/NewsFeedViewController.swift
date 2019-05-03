@@ -8,6 +8,7 @@
 
 import UIKit
 import SWRevealViewController
+import Kingfisher
 
 class NewsFeedViewController: UIViewController {
     
@@ -17,6 +18,8 @@ class NewsFeedViewController: UIViewController {
     
     // MARK: - Properties
     let viewModel = NewsFeedViewModel()
+    
+    var xmlParser : NewsFeedXMLParser!
     
     // MARK: - LoadView
     override func viewDidLoad() {
@@ -28,7 +31,17 @@ class NewsFeedViewController: UIViewController {
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         self.navigationItem.title = viewModel.currentNewsChannelSource
+        
+        xmlParse()
 }
+    
+    func xmlParse() {
+        
+        guard let url = URL(string: "https://www.wired.com/feed/rss") else { return }
+        xmlParser = NewsFeedXMLParser()
+        xmlParser.delegate = self
+        xmlParser.startParsingWithContentsOfURL(rssURL: url)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -58,14 +71,21 @@ extension NewsFeedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.newsDataSource.count
+        return xmlParser.arrParsedData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let newsFeedCell = tableView.dequeueReusableCell(withIdentifier: "newsFeedCell") as? NewsFeedTableViewCell else { return UITableViewCell() }
-        newsFeedCell.newsImage.image = viewModel.newsDataSource[indexPath.row].0
-        newsFeedCell.newsTitle.text = viewModel.newsDataSource[indexPath.row].1
+        
+        let currentDictionary = xmlParser.arrParsedData[indexPath.row] as [String: String]
+        
+        if let url = currentDictionary["media:thumbnail"] {
+            newsFeedCell.newsImage.kf.setImage(with: URL(string: url))
+        }
+
+        newsFeedCell.newsTitle.text = currentDictionary["title"]
+                
         return newsFeedCell
     }
 }
@@ -80,5 +100,11 @@ extension NewsFeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
        // self.performSegue(withIdentifier: "showNewsFeed", sender: self)
+    }
+}
+
+extension NewsFeedViewController: NewsFeedXMLParserDelegate {
+    func parsingWasFinished() {
+        self.tableView.reloadData()
     }
 }
