@@ -48,6 +48,14 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             foundCharacters += url
             currentDataDictionary[currentElement] = foundCharacters
         }
+        
+        if elementName == "media:content" {
+            guard let url = attributeDict["url"] else { return }
+            foundCharacters += url
+            currentDataDictionary["media:thumbnail"] = foundCharacters
+        }
+        
+        
 }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -63,6 +71,10 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             
             // last element close currentDataDictionary
             if currentElement == "media:thumbnail"/*"pubDate"*/ {
+                arrParsedData.append(currentDataDictionary)
+            }
+            
+            if currentElement == "media:content"/*"pubDate"*/ {
                 arrParsedData.append(currentDataDictionary)
             }
         }
