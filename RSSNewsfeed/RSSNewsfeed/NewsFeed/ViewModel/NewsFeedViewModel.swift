@@ -7,12 +7,39 @@
 //
 
 import UIKit
+import RealmSwift
 
 class NewsFeedViewModel {
     
     // MARK: - Properties
     var currentNewsChannelSource = "https://www.wired.com/feed/rss"
     var currentChannelName = "Wired"
+    var currentNewsSourceModel: NewsSource!
+
+    let realm = try! Realm()
+    lazy var channelList: Results<NewsSource> = { self.realm.objects(NewsSource.self) }()
     
-    var newsDataSource = [(UIImage(named: "testPhoto")!, "HOTNEWSTITLE1"), (UIImage(named: "testPhoto")!, "HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2HOTNEWSTITLE2"), (UIImage(named: "testPhoto")!, "HOTNEWSTITLE3"), (UIImage(named: "testPhoto")!, "HOTNEWSTITLE4"), (UIImage(named: "testPhoto")!, "HOTNEWSTITLE5"), (UIImage(named: "testPhoto")!, "HOTNEWSTITLE6"), (UIImage(named: "testPhoto")!, "HOTNEWSTITLE7")]
+    // MARK: - Methods
+    func populateDefaultSources() {
+        
+        if channelList.count == 0 {
+            let realm = try! Realm()
+            try! realm.write() {
+                
+                let defaultNewsSources: [(String, String)] = [("Wired", "https://www.wired.com/feed/rss"), ("New Yorker.Daily Cartoon", "https://www.newyorker.com/feed/cartoons/daily-cartoon"), ("Buzzfeed", "https://www.buzzfeed.com/world.xml"), ("Time", "http://feeds.feedburner.com/time/world"), ("NYTimes", "http://rss.nytimes.com/services/xml/rss/nyt/US.xml")]
+                
+                for newsSource in defaultNewsSources {
+                    let newSource = NewsSource()
+                    newSource.sourceName = newsSource.0
+                    newSource.sourceLink = newsSource.1
+                    newSource.id = UUID().uuidString
+                    
+                    realm.add(newSource)
+                }
+            }
+            channelList = realm.objects(NewsSource.self)
+        }
+    }
+    
+
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import SWRevealViewController
+import RealmSwift
 
 class ChannelListViewController: UIViewController {
     
@@ -31,12 +32,16 @@ class ChannelListViewController: UIViewController {
                 if let newsFeedViewController = navigationController.viewControllers.last as? NewsFeedViewController {
                     guard let selectedChannelIndex = tableView.indexPathForSelectedRow else { return }
                     
-                    let selectedChannelName = viewModel.channelList[selectedChannelIndex.row]
-                    let selectedChannelSource = viewModel.channelSource[selectedChannelIndex.row]
-
+                    let selectedChannelName = viewModel.channelList[selectedChannelIndex.row].sourceName
+                    let selectedChannelSource = viewModel.channelList[selectedChannelIndex.row].sourceLink
+                    
                     
                     newsFeedViewController.viewModel.currentChannelName = selectedChannelName
                     newsFeedViewController.viewModel.currentNewsChannelSource = selectedChannelSource
+                    
+                    guard let selectedNewsSourceModel = try! Realm().object(ofType: NewsSource.self, forPrimaryKey: selectedChannelName) else { return }
+                
+                    newsFeedViewController.viewModel.currentNewsSourceModel = selectedNewsSourceModel
                 }
             }
         }
@@ -57,7 +62,8 @@ extension ChannelListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let channelListCell = tableView.dequeueReusableCell(withIdentifier: "ChannelListCell") else { return UITableViewCell() }
-        channelListCell.textLabel?.text = viewModel.channelList[indexPath.row]
+        channelListCell.textLabel?.text = viewModel.channelList[indexPath.row].sourceName
+        
         
         return channelListCell
     }

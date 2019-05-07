@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 protocol NewsFeedXMLParserDelegate {
     func parsingWasFinished()
@@ -27,6 +28,7 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
     
     var mediaUrl = ""
     
+    var newsModel: NewsSource!
     
     func startParsingWithContentsOfURL(rssURL: URL) {
         guard let parser = XMLParser(contentsOf: rssURL) else { return }
@@ -54,8 +56,6 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             foundCharacters += url
             currentDataDictionary["media:thumbnail"] = foundCharacters
         }
-        
-        
 }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -66,16 +66,12 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             foundCharacters = ""
             
             // last element close currentDataDictionary
-            if currentElement == "media:thumbnail"/*"pubDate"*/ {
+            if currentElement == "media:thumbnail" || currentElement == "media:content" {
                 arrParsedData.append(currentDataDictionary)
-            }
-            
-            if currentElement == "media:content"/*"pubDate"*/ {
-                arrParsedData.append(currentDataDictionary)
+                addNewsFrom(dataDictionary: currentDataDictionary)
             }
         }
     }
-
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         if currentElement == "title" || currentElement == "link" || currentElement == "pubDate" {
@@ -89,5 +85,29 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
     
     func parser(_ parser: XMLParser, validationErrorOccurred validationError: Error) {
         print(validationError.localizedDescription)
+    }
+    
+    func addNewsFrom(dataDictionary: [String: String]) {
+        let realm = try! Realm()
+        
+        try! realm.write {
+            let newArticle = NewsPost()
+            
+            guard let title = dataDictionary["title"] else { return }
+            newArticle.title = title
+            
+            guard let link = dataDictionary["link"] else { return }
+            newArticle.link = link
+            
+            guard let pubDate = dataDictionary["pubDate"] else { return }
+            newArticle.pubDate = pubDate
+            
+            guard let imageURL = dataDictionary["media:thumbnail"] else { return }
+            newArticle.imageURL = imageURL
+            
+            newArticle.newsSource = newsModel
+            
+            realm.add(newArticle)
+        }
     }
 }

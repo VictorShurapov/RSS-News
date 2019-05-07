@@ -24,6 +24,8 @@
 		F376C132228057DE00002EBD /* WebView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F376C131228057DE00002EBD /* WebView.storyboard */; };
 		F376C13722805FE400002EBD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F376C13622805FE400002EBD /* WebKit.framework */; };
 		F39FB244227B1AA400778429 /* NewsFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39FB243227B1AA300778429 /* NewsFeedTableViewCell.swift */; };
+		F3BA269422817A0A00FE3C29 /* NewsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BA269322817A0900FE3C29 /* NewsPost.swift */; };
+		F3BA269722818FF100FE3C29 /* NewsSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BA269622818FF100FE3C29 /* NewsSource.swift */; };
 		F3F1F7E8227B49030001FCC3 /* NewsFeedXMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F1F7E7227B49030001FCC3 /* NewsFeedXMLParser.swift */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +51,8 @@
 		F376C131228057DE00002EBD /* WebView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WebView.storyboard; sourceTree = "<group>"; };
 		F376C13622805FE400002EBD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		F39FB243227B1AA300778429 /* NewsFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedTableViewCell.swift; sourceTree = "<group>"; };
+		F3BA269322817A0900FE3C29 /* NewsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPost.swift; sourceTree = "<group>"; };
+		F3BA269622818FF100FE3C29 /* NewsSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsSource.swift; sourceTree = "<group>"; };
 		F3F1F7E7227B49030001FCC3 /* NewsFeedXMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedXMLParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				F328B5CA22731A8400864E61 /* AppDelegate.swift */,
+				F3BA269522817E4400FE3C29 /* Model */,
 				F376C13322805E6600002EBD /* WebView */,
 				F38F4A2A22805396005A1A28 /* Extension */,
 				F328B5CE22731A8400864E61 /* Main.storyboard */,
@@ -179,6 +184,15 @@
 				F3414FEA2280311D00FC8704 /* NetworkReachability.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		F3BA269522817E4400FE3C29 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F3BA269322817A0900FE3C29 /* NewsPost.swift */,
+				F3BA269622818FF100FE3C29 /* NewsSource.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,6 +299,8 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-RSSNewsfeed/Pods-RSSNewsfeed-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SWRevealViewController/SWRevealViewController.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -292,6 +308,8 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWRevealViewController.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,10 +324,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3BA269422817A0A00FE3C29 /* NewsPost.swift in Sources */,
 				F3F1F7E8227B49030001FCC3 /* NewsFeedXMLParser.swift in Sources */,
 				F34F19F6227AEDAE0069633A /* NewsFeedViewModel.swift in Sources */,
 				F34F19E9227AE2B20069633A /* ChannelListViewController.swift in Sources */,
 				F376C12E2280566B00002EBD /* WebViewController.swift in Sources */,
+				F3BA269722818FF100FE3C29 /* NewsSource.swift in Sources */,
 				F39FB244227B1AA400778429 /* NewsFeedTableViewCell.swift in Sources */,
 				F328B5CB22731A8400864E61 /* AppDelegate.swift in Sources */,
 				F34F19EB227AE43B0069633A /* NewsFeedViewController.swift in Sources */,

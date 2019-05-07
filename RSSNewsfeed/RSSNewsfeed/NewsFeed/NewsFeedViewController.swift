@@ -9,6 +9,7 @@
 import UIKit
 import SWRevealViewController
 import Kingfisher
+import RealmSwift
 
 class NewsFeedViewController: UIViewController {
     
@@ -20,18 +21,25 @@ class NewsFeedViewController: UIViewController {
     let viewModel = NewsFeedViewModel()
     var xmlParser : NewsFeedXMLParser!
     let networkReachability = NetworkReachability()
+    var isOffline = true
 
     
     // MARK: - LoadView
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        viewModel.populateDefaultSources()
+
         // Navigation
         menuButton.target = self.revealViewController()
         menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         self.navigationItem.title = viewModel.currentChannelName
+        
+        xmlSetup()
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
+
 }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,18 +66,32 @@ class NewsFeedViewController: UIViewController {
     // MARK: - Methods
     func networkCheck() {
         if networkReachability.isNetworkAvailable() {
+            isOffline = false
             xmlParse()
         } else {
+            isOffline = true
             self.showAlert(errorTitle: "Network is unavailable", errorMessage: "Please check you connection and select newssource once again.")
+            
         }
+    }
+    
+    fileprivate func xmlSetup() {
+        xmlParser = NewsFeedXMLParser()
+        xmlParser.delegate = self
+
+        
+        if viewModel.currentNewsSourceModel == nil {
+            guard let selectedNewsSourceModel = try! Realm().object(ofType: NewsSource.self, forPrimaryKey: "Wired") else { return }
+            viewModel.currentNewsSourceModel = selectedNewsSourceModel
+        }
+        xmlParser.newsModel = viewModel.currentNewsSourceModel
     }
     
     fileprivate func xmlParse() {
         
         guard let url = URL(string: viewModel.currentNewsChannelSource) else { return }
 
-        xmlParser = NewsFeedXMLParser()
-        xmlParser.delegate = self
+        xmlSetup()
         xmlParser.startParsingWithContentsOfURL(rssURL: url)
     }
     
