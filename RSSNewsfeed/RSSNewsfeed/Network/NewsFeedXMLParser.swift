@@ -60,11 +60,7 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if !foundCharacters.isEmpty {
-            
-            if elementName == "link" {
-                foundCharacters = (foundCharacters as NSString).substring(to: 3)
-            }
-            
+                        
             currentDataDictionary[currentElement] = foundCharacters
             
             foundCharacters = ""

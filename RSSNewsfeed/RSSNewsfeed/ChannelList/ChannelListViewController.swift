@@ -22,7 +22,7 @@ class ChannelListViewController: UIViewController {
     }
     
     // MARK: - Properties
-    fileprivate let viewModel = ChannelListViewModel()
+    let viewModel = ChannelListViewModel()
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -81,11 +81,20 @@
                     <connections>
                         <outlet property="menuButton" destination="Xq6-kg-pdP" id="kK8-ah-S3X"/>
                         <outlet property="tableView" destination="xGO-oq-qxm" id="hLC-Ew-7bi"/>
+                        <segue destination="eHW-Ws-ACn" kind="show" identifier="showWebView" id="lZ2-bV-Iu9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zjP-UP-1Y6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1191.304347826087" y="438.61607142857139"/>
+        </scene>
+        <!--WebView-->
+        <scene sceneID="U6m-Xp-ncx">
+            <objects>
+                <viewControllerPlaceholder storyboardName="WebView" id="eHW-Ws-ACn" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DG6-tC-696" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2028" y="210"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OLx-CH-BVZ">

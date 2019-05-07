@@ -18,8 +18,9 @@ class NewsFeedViewController: UIViewController {
     
     // MARK: - Properties
     let viewModel = NewsFeedViewModel()
-    
     var xmlParser : NewsFeedXMLParser!
+    let networkReachability = NetworkReachability()
+
     
     // MARK: - LoadView
     override func viewDidLoad() {
@@ -31,18 +32,7 @@ class NewsFeedViewController: UIViewController {
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         self.navigationItem.title = viewModel.currentChannelName
-        
-        xmlParse()
 }
-    
-    func xmlParse() {
-        
-        guard let url = URL(string: viewModel.currentNewsChannelSource) else { return }
-
-        xmlParser = NewsFeedXMLParser()
-        xmlParser.delegate = self
-        xmlParser.startParsingWithContentsOfURL(rssURL: url)
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -51,6 +41,9 @@ class NewsFeedViewController: UIViewController {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
+        
+        networkCheck()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -62,7 +55,55 @@ class NewsFeedViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = false
     }
     
-}
+    // MARK: - Methods
+    func networkCheck() {
+        if networkReachability.isNetworkAvailable() {
+            xmlParse()
+        } else {
+            self.showAlert(errorTitle: "Network is unavailable", errorMessage: "Please check you connection and select newssource once again.")
+        }
+    }
+    
+    fileprivate func xmlParse() {
+        
+        guard let url = URL(string: viewModel.currentNewsChannelSource) else { return }
+
+        xmlParser = NewsFeedXMLParser()
+        xmlParser.delegate = self
+        xmlParser.startParsingWithContentsOfURL(rssURL: url)
+    }
+    
+    fileprivate func open(url: String, currentRow: Int) {
+        
+        if let checkedURL = URL(string: url) {
+            
+            UIApplication.shared.open(checkedURL, options: [:]) { _ in
+                
+                // get current item and deselect it
+                let index = IndexPath(row: currentRow, section: 0)
+                self.tableView.deselectRow(at: index, animated: true)
+                                
+            }
+        }
+    }
+    
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showWebView" {
+            
+                if let webViewController = segue.destination as? WebViewController {
+                    
+                    guard let selectedChannelIndex = tableView.indexPathForSelectedRow else { return }
+                    
+                    let currentDictionary = xmlParser.arrParsedData[selectedChannelIndex.row] as [String: String]
+
+                    if let link = currentDictionary["link"] {
+                        webViewController.url = URL(string: link)
+                    }
+                }
+            }
+        }
+    }
 
 // MARK: - UITableViewDataSource Methods
 extension NewsFeedViewController: UITableViewDataSource {
@@ -72,6 +113,7 @@ extension NewsFeedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard xmlParser != nil else { return 0 }
         return xmlParser.arrParsedData.count
     }
     
@@ -99,8 +141,7 @@ extension NewsFeedViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-       // self.performSegue(withIdentifier: "showNewsFeed", sender: self)
+        performSegue(withIdentifier: "showWebView", sender: nil)
     }
 }
 
