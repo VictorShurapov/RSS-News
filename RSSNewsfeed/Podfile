@@ -9,5 +9,6 @@ target 'RSSNewsfeed' do
 pod 'SwiftLint'
 pod 'SWRevealViewController'
 pod 'Kingfisher'
+pod 'RealmSwift'
 
 end
