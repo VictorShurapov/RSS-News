@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xnq-87-ZHW">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--WebView-->
+        <scene sceneID="t9f-8o-u1N">
+            <objects>
+                <viewController id="Xnq-87-ZHW" customClass="WebViewController" customModule="RSSNewsfeed" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Pn7-XO-Xzc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jeE-rS-dQf">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="qfU-aK-XDH">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="jeE-rS-dQf" firstAttribute="top" secondItem="Pn7-XO-Xzc" secondAttribute="top" id="6bH-N9-csH"/>
+                            <constraint firstItem="jeE-rS-dQf" firstAttribute="trailing" secondItem="HPq-Pf-4Jf" secondAttribute="trailing" id="9oi-Ll-9T6"/>
+                            <constraint firstItem="qfU-aK-XDH" firstAttribute="centerY" secondItem="Pn7-XO-Xzc" secondAttribute="centerY" id="LFT-O6-rcL"/>
+                            <constraint firstItem="jeE-rS-dQf" firstAttribute="leading" secondItem="HPq-Pf-4Jf" secondAttribute="leading" id="Wf5-rI-Shr"/>
+                            <constraint firstItem="jeE-rS-dQf" firstAttribute="bottom" secondItem="HPq-Pf-4Jf" secondAttribute="bottom" id="eGn-0H-NGj"/>
+                            <constraint firstItem="qfU-aK-XDH" firstAttribute="centerX" secondItem="Pn7-XO-Xzc" secondAttribute="centerX" id="nZ1-CQ-FwN"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="HPq-Pf-4Jf"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="WebView" id="ZEO-X8-Ubi"/>
+                    <connections>
+                        <outlet property="spinner" destination="qfU-aK-XDH" id="d72-LN-XGi"/>
+                        <outlet property="webView" destination="jeE-rS-dQf" id="FP4-sq-xFq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1xA-2Y-hee" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1686" y="1981"/>
+        </scene>
+    </scenes>
+</document>
