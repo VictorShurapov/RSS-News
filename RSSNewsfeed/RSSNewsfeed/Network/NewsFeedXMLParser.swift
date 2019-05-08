@@ -18,6 +18,8 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
     
     var arrParsedData = [[String: String]]()
     
+    var newsArray = [NewsPost]()
+    
     var currentDataDictionary = [String: String]()
     
     var currentElement = ""
@@ -67,10 +69,37 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             
             // last element close currentDataDictionary
             if currentElement == "media:thumbnail" || currentElement == "media:content" {
+                
                 arrParsedData.append(currentDataDictionary)
+               newsArray = populateNews()
+                
                 addNewsFrom(dataDictionary: currentDataDictionary)
             }
         }
+    }
+    
+    func populateNews() -> [NewsPost] {
+        
+        let newsArray = arrParsedData.map { parsedData -> NewsPost  in
+            let news = NewsPost()
+            
+            guard let title = parsedData["title"] else { return NewsPost() }
+            news.title = title
+            
+            guard let link = parsedData["link"] else { return NewsPost() }
+            news.link = link
+            
+            guard let pubDate = parsedData["pubDate"] else { return NewsPost() }
+            news.pubDate = pubDate
+            
+            guard let imageURL = parsedData["media:thumbnail"] else { return NewsPost() }
+            news.imageURL = imageURL
+            
+            news.newsSource = newsModel
+            
+            return news
+        }
+        return newsArray
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {

@@ -22,13 +22,13 @@ class NewsFeedViewController: UIViewController {
     var xmlParser : NewsFeedXMLParser!
     let networkReachability = NetworkReachability()
     var isOffline = true
-
+    
     
     // MARK: - LoadView
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.populateDefaultSources()
-
+        
         // Navigation
         menuButton.target = self.revealViewController()
         menuButton.action = #selector(SWRevealViewController.revealToggle(_:))
@@ -39,8 +39,8 @@ class NewsFeedViewController: UIViewController {
         xmlSetup()
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
-
-}
+        
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -51,6 +51,7 @@ class NewsFeedViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         
         networkCheck()
+        getNewsFromRealm()
         
     }
     
@@ -64,21 +65,29 @@ class NewsFeedViewController: UIViewController {
     }
     
     // MARK: - Methods
-    func networkCheck() {
+    fileprivate func networkCheck() {
         if networkReachability.isNetworkAvailable() {
             isOffline = false
             xmlParse()
         } else {
             isOffline = true
             self.showAlert(errorTitle: "Network is unavailable", errorMessage: "Please check you connection and select newssource once again.")
-            
+            getNewsFromRealm()
+            tableView.reloadData()
         }
+    }
+    
+    fileprivate func getNewsFromRealm() {
+        let news = try! Realm().objects(NewsPost.self)
+        let newsArray = Array(news)
+        let sourceName = viewModel.currentChannelName
+        xmlParser.newsArray = newsArray.filter { $0.newsSource.sourceName == sourceName }
     }
     
     fileprivate func xmlSetup() {
         xmlParser = NewsFeedXMLParser()
         xmlParser.delegate = self
-
+        
         
         if viewModel.currentNewsSourceModel == nil {
             guard let selectedNewsSourceModel = try! Realm().object(ofType: NewsSource.self, forPrimaryKey: "Wired") else { return }
@@ -90,7 +99,7 @@ class NewsFeedViewController: UIViewController {
     fileprivate func xmlParse() {
         
         guard let url = URL(string: viewModel.currentNewsChannelSource) else { return }
-
+        
         xmlSetup()
         xmlParser.startParsingWithContentsOfURL(rssURL: url)
     }
@@ -104,7 +113,7 @@ class NewsFeedViewController: UIViewController {
                 // get current item and deselect it
                 let index = IndexPath(row: currentRow, section: 0)
                 self.tableView.deselectRow(at: index, animated: true)
-                                
+                
             }
         }
     }
@@ -113,19 +122,19 @@ class NewsFeedViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showWebView" {
             
-                if let webViewController = segue.destination as? WebViewController {
-                    
-                    guard let selectedChannelIndex = tableView.indexPathForSelectedRow else { return }
-                    
-                    let currentDictionary = xmlParser.arrParsedData[selectedChannelIndex.row] as [String: String]
-
-                    if let link = currentDictionary["link"] {
-                        webViewController.url = URL(string: link)
-                    }
-                }
+            if let webViewController = segue.destination as? WebViewController {
+                
+                guard let selectedChannelIndex = tableView.indexPathForSelectedRow else { return }
+                
+                let currentNews = xmlParser.newsArray[selectedChannelIndex.row]
+                
+                let link = currentNews.link
+                webViewController.url = URL(string: link)
+                
             }
         }
     }
+}
 
 // MARK: - UITableViewDataSource Methods
 extension NewsFeedViewController: UITableViewDataSource {
@@ -136,20 +145,17 @@ extension NewsFeedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard xmlParser != nil else { return 0 }
-        return xmlParser.arrParsedData.count
+        return xmlParser.newsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let newsFeedCell = tableView.dequeueReusableCell(withIdentifier: "newsFeedCell") as? NewsFeedTableViewCell else { return UITableViewCell() }
         
-        let currentDictionary = xmlParser.arrParsedData[indexPath.row] as [String: String]
+        let url = xmlParser.newsArray[indexPath.row].imageURL
+        newsFeedCell.newsImage.kf.setImage(with: URL(string: url))
         
-        if let url = currentDictionary["media:thumbnail"] {
-            newsFeedCell.newsImage.kf.setImage(with: URL(string: url))
-        }
-
-        newsFeedCell.newsTitle.text = currentDictionary["title"]
+        newsFeedCell.newsTitle.text = xmlParser.newsArray[indexPath.row].title
         
         return newsFeedCell
     }
