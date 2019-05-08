@@ -21,7 +21,7 @@ class NewsFeedViewController: UIViewController {
     let viewModel = NewsFeedViewModel()
     var xmlParser : NewsFeedXMLParser!
     let networkReachability = NetworkReachability()
-    var isOffline = true
+    var isOffline = false
     
     
     // MARK: - LoadView
@@ -52,7 +52,6 @@ class NewsFeedViewController: UIViewController {
         
         networkCheck()
         getNewsFromRealm()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,12 +67,27 @@ class NewsFeedViewController: UIViewController {
     fileprivate func networkCheck() {
         if networkReachability.isNetworkAvailable() {
             isOffline = false
+            clearPreviousNews()
             xmlParse()
         } else {
             isOffline = true
             self.showAlert(errorTitle: "Network is unavailable", errorMessage: "Please check you connection and select newssource once again.")
             getNewsFromRealm()
             tableView.reloadData()
+        }
+    }
+    
+    fileprivate func clearPreviousNews() {
+        let realm = try! Realm()
+
+        let news = try! realm.objects(NewsSource.self)
+        let first = news.first!
+        let magic = first.news
+        
+        try! realm.write {
+            for i in magic {
+                realm.delete(i)
+            }
         }
     }
     
