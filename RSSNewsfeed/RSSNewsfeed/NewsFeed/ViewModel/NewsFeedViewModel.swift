@@ -16,14 +16,13 @@ class NewsFeedViewModel {
     var currentChannelName = "Wired"
     var currentNewsSourceModel: NewsSource!
 
-    let realm = try! Realm()
+    let realm = RealmService.service.realm
     lazy var channelList: Results<NewsSource> = { self.realm.objects(NewsSource.self) }()
     
     // MARK: - Methods
     func populateDefaultSources() {
         
         if channelList.count == 0 {
-            let realm = try! Realm()
             try! realm.write() {
                 
                 let defaultNewsSources: [(String, String)] = [("Wired", "https://www.wired.com/feed/rss"), ("New Yorker.Daily Cartoon", "https://www.newyorker.com/feed/cartoons/daily-cartoon"), ("Buzzfeed", "https://www.buzzfeed.com/world.xml"), ("Time", "http://feeds.feedburner.com/time/world"), ("NYTimes", "http://rss.nytimes.com/services/xml/rss/nyt/US.xml")]

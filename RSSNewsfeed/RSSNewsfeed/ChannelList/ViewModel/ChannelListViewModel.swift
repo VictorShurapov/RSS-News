@@ -13,7 +13,7 @@ class ChannelListViewModel {
 
     // MARK: - Properties
     
-    let realm = try! Realm()
+    let realm = RealmService.service.realm
     lazy var channelList: Results<NewsSource> = { self.realm.objects(NewsSource.self) }()
     
 }

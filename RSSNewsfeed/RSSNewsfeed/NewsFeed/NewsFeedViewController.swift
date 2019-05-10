@@ -21,6 +21,7 @@ class NewsFeedViewController: UIViewController {
     let viewModel = NewsFeedViewModel()
     var xmlParser : NewsFeedXMLParser!
     let networkReachability = NetworkReachability()
+    let realm = RealmService.service.realm
     var isOffline = false
     
     
@@ -39,7 +40,6 @@ class NewsFeedViewController: UIViewController {
         xmlSetup()
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +51,6 @@ class NewsFeedViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         
         networkCheck()
-        getNewsFromRealm()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -78,9 +77,8 @@ class NewsFeedViewController: UIViewController {
     }
     
     fileprivate func clearPreviousNews() {
-        let realm = try! Realm()
-
-        let news = try! realm.objects(NewsSource.self)
+        
+        let news = realm.objects(NewsSource.self)
         let first = news.first!
         let magic = first.news
         
@@ -92,7 +90,7 @@ class NewsFeedViewController: UIViewController {
     }
     
     fileprivate func getNewsFromRealm() {
-        let news = try! Realm().objects(NewsPost.self)
+        let news = realm.objects(NewsPost.self)
         let newsArray = Array(news)
         let sourceName = viewModel.currentChannelName
         xmlParser.newsArray = newsArray.filter { $0.newsSource.sourceName == sourceName }
@@ -104,7 +102,7 @@ class NewsFeedViewController: UIViewController {
         
         
         if viewModel.currentNewsSourceModel == nil {
-            guard let selectedNewsSourceModel = try! Realm().object(ofType: NewsSource.self, forPrimaryKey: "Wired") else { return }
+            guard let selectedNewsSourceModel = realm.object(ofType: NewsSource.self, forPrimaryKey: "Wired") else { return }
             viewModel.currentNewsSourceModel = selectedNewsSourceModel
         }
         xmlParser.newsModel = viewModel.currentNewsSourceModel

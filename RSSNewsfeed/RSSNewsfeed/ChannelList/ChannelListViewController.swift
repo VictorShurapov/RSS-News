@@ -35,11 +35,10 @@ class ChannelListViewController: UIViewController {
                     let selectedChannelName = viewModel.channelList[selectedChannelIndex.row].sourceName
                     let selectedChannelSource = viewModel.channelList[selectedChannelIndex.row].sourceLink
                     
-                    
                     newsFeedViewController.viewModel.currentChannelName = selectedChannelName
                     newsFeedViewController.viewModel.currentNewsChannelSource = selectedChannelSource
                     
-                    guard let selectedNewsSourceModel = try! Realm().object(ofType: NewsSource.self, forPrimaryKey: selectedChannelName) else { return }
+                    guard let selectedNewsSourceModel = RealmService.service.realm.object(ofType: NewsSource.self, forPrimaryKey: selectedChannelName) else { return }
                 
                     newsFeedViewController.viewModel.currentNewsSourceModel = selectedNewsSourceModel
                 }
