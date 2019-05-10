@@ -23,6 +23,7 @@
 		F376C130228056BF00002EBD /* RSSFeedUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F376C12F228056BF00002EBD /* RSSFeedUIViewController.swift */; };
 		F376C132228057DE00002EBD /* WebView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F376C131228057DE00002EBD /* WebView.storyboard */; };
 		F376C13722805FE400002EBD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F376C13622805FE400002EBD /* WebKit.framework */; };
+		F377CAC52285AF2C00438205 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F377CAC42285AF2C00438205 /* RealmService.swift */; };
 		F39FB244227B1AA400778429 /* NewsFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39FB243227B1AA300778429 /* NewsFeedTableViewCell.swift */; };
 		F3BA269422817A0A00FE3C29 /* NewsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BA269322817A0900FE3C29 /* NewsPost.swift */; };
 		F3BA269722818FF100FE3C29 /* NewsSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BA269622818FF100FE3C29 /* NewsSource.swift */; };
@@ -50,6 +51,7 @@
 		F376C12F228056BF00002EBD /* RSSFeedUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSFeedUIViewController.swift; sourceTree = "<group>"; };
 		F376C131228057DE00002EBD /* WebView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = WebView.storyboard; sourceTree = "<group>"; };
 		F376C13622805FE400002EBD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		F377CAC42285AF2C00438205 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		F39FB243227B1AA300778429 /* NewsFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedTableViewCell.swift; sourceTree = "<group>"; };
 		F3BA269322817A0900FE3C29 /* NewsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPost.swift; sourceTree = "<group>"; };
 		F3BA269622818FF100FE3C29 /* NewsSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsSource.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				F3BA269322817A0900FE3C29 /* NewsPost.swift */,
+				F377CAC42285AF2C00438205 /* RealmService.swift */,
 				F3BA269622818FF100FE3C29 /* NewsSource.swift */,
 			);
 			path = Model;
@@ -333,6 +336,7 @@
 				F39FB244227B1AA400778429 /* NewsFeedTableViewCell.swift in Sources */,
 				F328B5CB22731A8400864E61 /* AppDelegate.swift in Sources */,
 				F34F19EB227AE43B0069633A /* NewsFeedViewController.swift in Sources */,
+				F377CAC52285AF2C00438205 /* RealmService.swift in Sources */,
 				F34F19ED227AE9D40069633A /* ChannelListViewModel.swift in Sources */,
 				F3414FEB2280311D00FC8704 /* NetworkReachability.swift in Sources */,
 				F376C130228056BF00002EBD /* RSSFeedUIViewController.swift in Sources */,

@@ -73,7 +73,7 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
                 arrParsedData.append(currentDataDictionary)
                newsArray = populateNews()
                 
-                addNewsFrom(dataDictionary: currentDataDictionary)
+                RealmService.service.addNewsFrom(dataDictionary: currentDataDictionary, newsSourceModel: newsModel)
             }
         }
     }
@@ -116,27 +116,5 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
         print(validationError.localizedDescription)
     }
     
-    func addNewsFrom(dataDictionary: [String: String]) {
-        let realm = try! Realm()
-        
-        try! realm.write {
-            let newArticle = NewsPost()
-            
-            guard let title = dataDictionary["title"] else { return }
-            newArticle.title = title
-            
-            guard let link = dataDictionary["link"] else { return }
-            newArticle.link = link
-            
-            guard let pubDate = dataDictionary["pubDate"] else { return }
-            newArticle.pubDate = pubDate
-            
-            guard let imageURL = dataDictionary["media:thumbnail"] else { return }
-            newArticle.imageURL = imageURL
-            
-            newArticle.newsSource = newsModel
-            
-            realm.add(newArticle)
-        }
-    }
+
 }
