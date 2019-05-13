@@ -32,14 +32,15 @@ class ChannelListViewController: UIViewController {
                 if let newsFeedViewController = navigationController.viewControllers.last as? NewsFeedViewController {
                     guard let selectedChannelIndex = tableView.indexPathForSelectedRow else { return }
                     
-                    let selectedChannelName = viewModel.channelList[selectedChannelIndex.row].sourceName
-                    let selectedChannelSource = viewModel.channelList[selectedChannelIndex.row].sourceLink
+                    guard let channelListChecked = viewModel.channelList else { return }
+                    
+                    let selectedChannelName = channelListChecked[selectedChannelIndex.row].sourceName
+                    let selectedChannelSource = channelListChecked[selectedChannelIndex.row].sourceLink
                     
                     newsFeedViewController.viewModel.currentChannelName = selectedChannelName
                     newsFeedViewController.viewModel.currentNewsChannelSource = selectedChannelSource
                     
-                    guard let selectedNewsSourceModel = RealmService.service.realm.object(ofType: NewsSource.self, forPrimaryKey: selectedChannelName) else { return }
-                
+                    guard let selectedNewsSourceModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: selectedChannelName) else { return }
                     newsFeedViewController.viewModel.currentNewsSourceModel = selectedNewsSourceModel
                 }
             }
@@ -55,14 +56,19 @@ extension ChannelListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.channelList.count
+        
+        guard let channelListChecked = viewModel.channelList else { return 0 }
+
+        return channelListChecked.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let channelListCell = tableView.dequeueReusableCell(withIdentifier: "ChannelListCell") else { return UITableViewCell() }
-        channelListCell.textLabel?.text = viewModel.channelList[indexPath.row].sourceName
         
+        guard let channelListChecked = viewModel.channelList else { return UITableViewCell() }
+
+        channelListCell.textLabel?.text = channelListChecked[indexPath.row].sourceName
         
         return channelListCell
     }

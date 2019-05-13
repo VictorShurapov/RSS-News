@@ -13,11 +13,45 @@ class RealmService {
     
     static let service = RealmService()
     
-    let realm = try! Realm()
+    //let realm = try! Realm()
+    
+     var realm: Realm? {
+        do {
+            return try Realm()
+        } catch let error {
+            print("Could not write to database: " + error.localizedDescription)
+            return nil
+        }
+    }
+    
+    func getChannelList() -> Results <NewsSource>? {
+        if let realmChecked = realm {
+            return realmChecked.objects(NewsSource.self)
+        } else {
+            return nil
+        }
+    }
+    
+    func getNews() -> Results <NewsPost>? {
+        if let realmChecked = realm {
+            return realmChecked.objects(NewsPost.self)
+        } else {
+            return nil
+        }
+    }
+    
+    
+    func getChannelSourceModelFor(selectedChannelName: String) -> NewsSource? {
+        if let realmChecked = realm {
+            return realmChecked.object(ofType: NewsSource.self, forPrimaryKey: selectedChannelName)
+        } else {
+            return nil
+        }
+    }
 
-    func addNewsFrom(dataDictionary: [String: String], newsSourceModel:  NewsSource) {
+     func addNewsFrom(dataDictionary: [String: String], newsSourceModel:  NewsSource) {
         
-        try! realm.write {
+        try! realm?.write {
             let newArticle = NewsPost()
             
             guard let title = dataDictionary["title"] else { return }
@@ -34,7 +68,7 @@ class RealmService {
             
             newArticle.newsSource = newsSourceModel
             
-            realm.add(newArticle)
+            realm?.add(newArticle)
         }
     }
 

@@ -78,19 +78,19 @@ class NewsFeedViewController: UIViewController {
     
     fileprivate func clearPreviousNews() {
         
-        let news = realm.objects(NewsSource.self)
+        guard let news = RealmService.service.getChannelList() else { return }
         let first = news.first!
         let magic = first.news
         
-        try! realm.write {
+        try! realm?.write {
             for i in magic {
-                realm.delete(i)
+                realm?.delete(i)
             }
         }
     }
     
     fileprivate func getNewsFromRealm() {
-        let news = realm.objects(NewsPost.self)
+        guard let news = RealmService.service.getNews() else { return }
         let newsArray = Array(news)
         let sourceName = viewModel.currentChannelName
         xmlParser.newsArray = newsArray.filter { $0.newsSource.sourceName == sourceName }
@@ -102,7 +102,9 @@ class NewsFeedViewController: UIViewController {
         
         
         if viewModel.currentNewsSourceModel == nil {
-            guard let selectedNewsSourceModel = realm.object(ofType: NewsSource.self, forPrimaryKey: "Wired") else { return }
+            
+                                guard let selectedNewsSourceModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: "Wired") else { return }
+
             viewModel.currentNewsSourceModel = selectedNewsSourceModel
         }
         xmlParser.newsModel = viewModel.currentNewsSourceModel
