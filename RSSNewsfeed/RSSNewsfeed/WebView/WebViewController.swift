@@ -28,6 +28,8 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         if let actualURL = url {
             webView.load(URLRequest(url: actualURL))
             webView.allowsBackForwardNavigationGestures = true
+        } else {
+            self.showAlert(errorTitle: "Something went wrong", errorMessage: "Please try another news article")
         }
         
         // Add reply button for WebView

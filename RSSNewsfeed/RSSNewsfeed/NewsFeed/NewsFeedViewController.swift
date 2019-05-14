@@ -100,7 +100,6 @@ class NewsFeedViewController: UIViewController {
         xmlParser = NewsFeedXMLParser()
         xmlParser.delegate = self
         
-        
         if viewModel.currentNewsSourceModel == nil {
             
                                 guard let selectedNewsSourceModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: "Wired") else { return }
@@ -144,7 +143,6 @@ class NewsFeedViewController: UIViewController {
                 
                 let link = currentNews.link
                 webViewController.url = URL(string: link)
-                
             }
         }
     }

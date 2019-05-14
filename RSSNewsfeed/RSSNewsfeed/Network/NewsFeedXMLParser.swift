@@ -45,66 +45,57 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
     }
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        
+        foundCharacters = ""
+        
         currentElement = elementName
         
         if elementName == "media:thumbnail" {
             guard let url = attributeDict["url"] else { return }
             foundCharacters += url
-            currentDataDictionary[currentElement] = foundCharacters
+           // currentDataDictionary[currentElement] = foundCharacters
         }
         
         if elementName == "media:content" {
             guard let url = attributeDict["url"] else { return }
             foundCharacters += url
-            currentDataDictionary["media:thumbnail"] = foundCharacters
+            //currentDataDictionary["media:thumbnail"] = foundCharacters
         }
 }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if !foundCharacters.isEmpty {
-                        
-            currentDataDictionary[currentElement] = foundCharacters
+            
+            if elementName == "media:thumbnail" || elementName == "media:content" {
+                currentDataDictionary["media:thumbnail"] = foundCharacters
+            } else {
+                currentDataDictionary[currentElement] = foundCharacters
+            }
             
             foundCharacters = ""
             
             // last element close currentDataDictionary
             if currentElement == "media:thumbnail" || currentElement == "media:content" {
                 
-                arrParsedData.append(currentDataDictionary)
-               newsArray = populateNews()
+            arrParsedData.append(currentDataDictionary)
+            newsArray = populateNews()
                 
                 RealmService.service.addNewsFrom(dataDictionary: currentDataDictionary, newsSourceModel: newsModel)
             }
         }
     }
     
-    func populateNews() -> [NewsPost] {
-        
-        let newsArray = arrParsedData.map { parsedData -> NewsPost  in
-            let news = NewsPost()
-            
-            guard let title = parsedData["title"] else { return NewsPost() }
-            news.title = title
-            
-            guard let link = parsedData["link"] else { return NewsPost() }
-            news.link = link
-            
-            guard let pubDate = parsedData["pubDate"] else { return NewsPost() }
-            news.pubDate = pubDate
-            
-            guard let imageURL = parsedData["media:thumbnail"] else { return NewsPost() }
-            news.imageURL = imageURL
-            
-            news.newsSource = newsModel
-            
-            return news
-        }
-        return newsArray
-    }
-    
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if currentElement == "title" || currentElement == "link" || currentElement == "pubDate" {
+        if currentElement == "title" || currentElement == "pubDate" {
             foundCharacters += string
+        }
+        
+        if currentElement == "link" {
+            if string.contains("\n") {
+                foundCharacters += (string as NSString).substring(from: 3)
+            } else {
+                foundCharacters += string
+            }
         }
     }
     
@@ -116,5 +107,27 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
         print(validationError.localizedDescription)
     }
     
-
+    func populateNews() -> [NewsPost] {
+        
+        let newsArray = arrParsedData.map { parsedData -> NewsPost  in
+            let news = NewsPost()
+            
+            guard let title = parsedData["title"] else { return news }
+            news.title = title
+            
+            guard let link = parsedData["link"] else { return news }
+            news.link = link
+            
+            guard let imageURL = parsedData["media:thumbnail"] else { return news }
+            news.imageURL = imageURL
+            
+            guard let pubDate = parsedData["pubDate"] else { return news }
+            news.pubDate = pubDate
+            
+            news.newsSource = newsModel
+            
+            return news
+        }
+        return newsArray
+    }
 }
