@@ -79,11 +79,11 @@ class NewsFeedViewController: UIViewController {
     fileprivate func clearPreviousNews() {
         
         guard let news = RealmService.service.getChannelList() else { return }
-        let first = news.first!
-        let magic = first.news
+        let firstChannelSource = news.first!
+        let newsFromFirstChannelSource = firstChannelSource.news
         
         try! realm?.write {
-            for i in magic {
+            for i in newsFromFirstChannelSource {
                 realm?.delete(i)
             }
         }
@@ -165,6 +165,8 @@ extension NewsFeedViewController: UITableViewDataSource {
         guard let newsFeedCell = tableView.dequeueReusableCell(withIdentifier: "newsFeedCell") as? NewsFeedTableViewCell else { return UITableViewCell() }
         
         let url = xmlParser.newsArray[indexPath.row].imageURL
+        
+        
         newsFeedCell.newsImage.kf.setImage(with: URL(string: url))
         
         newsFeedCell.newsTitle.text = xmlParser.newsArray[indexPath.row].title

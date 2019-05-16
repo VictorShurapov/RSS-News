@@ -12,8 +12,12 @@ import RealmSwift
 
 class ChannelListViewController: UIViewController {
     
+    
     // MARK: - IBOutlets & IBActions
     @IBOutlet weak var tableView: UITableView!
+    @IBAction func addNewsSource(_ sender: Any) {
+        showAlertToAddNewsSourceWith()
+    }
     
     // MARK: - LoadView
     override func viewDidLoad() {
@@ -24,6 +28,27 @@ class ChannelListViewController: UIViewController {
     
     // MARK: - Properties
     let viewModel = ChannelListViewModel()
+    let realm = RealmService.service.realm
+    
+    
+    var addNewsTuple = ("", "") {
+        didSet {
+            writeNewsSourcetoRealm()
+        }
+    }
+    
+    func writeNewsSourcetoRealm() {
+        let newSource = NewsSource()
+        newSource.sourceName = addNewsTuple.0
+        newSource.sourceLink = addNewsTuple.1
+        newSource.id = UUID().uuidString
+        
+        try! realm?.write() {
+            realm?.add(newSource)
+        }
+        tableView.reloadData()
+    }
+    
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,7 +83,7 @@ extension ChannelListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         guard let channelListChecked = viewModel.channelList else { return 0 }
-
+        
         return channelListChecked.count
     }
     
@@ -67,7 +92,7 @@ extension ChannelListViewController: UITableViewDataSource {
         guard let channelListCell = tableView.dequeueReusableCell(withIdentifier: "ChannelListCell") else { return UITableViewCell() }
         
         guard let channelListChecked = viewModel.channelList else { return UITableViewCell() }
-
+        
         channelListCell.textLabel?.text = channelListChecked[indexPath.row].sourceName
         
         return channelListCell
@@ -86,3 +111,44 @@ extension ChannelListViewController: UITableViewDelegate {
         self.performSegue(withIdentifier: "showNewsFeed", sender: self)
     }
 }
+
+extension ChannelListViewController {
+    func showAlertToAddNewsSourceWith() {
+        
+        let alert = UIAlertController(title: "Add News Source", message: nil, preferredStyle: .alert)
+        
+        alert.addTextField { (userField) in
+            userField.placeholder = "News Source Name"
+        }
+        
+        alert.addTextField { (passWordField) in
+            passWordField.placeholder = "RSS link"
+            passWordField.text = "https://"
+        }
+        
+        //the cancel action doing nothing
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        
+        //the confirm action taking the inputs
+        let acceptAction = UIAlertAction(title: "Add", style: .default, handler: { [weak alert] (_) in
+            
+            guard let newsSourceTextField = alert?.textFields?[0], let rssLinkTextField = alert?.textFields?[1] else {
+                print("Alert textField is nil")
+                return
+            }
+            guard let newsSourceName = newsSourceTextField.text, let rssLink = rssLinkTextField.text else {
+                print("Issue with text in Alert textField")
+                return
+            }
+            self.addNewsTuple = (newsSourceName, rssLink)
+        })
+        
+        //adding the actions to alertController
+        alert.addAction(acceptAction)
+        alert.addAction(cancelAction)
+        
+        // Presenting the alert
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+

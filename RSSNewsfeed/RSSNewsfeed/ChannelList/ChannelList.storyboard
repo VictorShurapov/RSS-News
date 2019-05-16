@@ -45,13 +45,27 @@
                                     <outlet property="delegate" destination="5H4-UY-qfU" id="8uj-iu-k39"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VpA-KZ-I6i">
+                                <rect key="frame" x="20" y="44" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Kkf-G1-5ce"/>
+                                    <constraint firstAttribute="width" constant="30" id="bjJ-If-wO8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="35"/>
+                                <state key="normal" title="+"/>
+                                <connections>
+                                    <action selector="addNewsSource:" destination="5H4-UY-qfU" eventType="touchUpInside" id="Yag-8g-EEX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.097236998379999995" green="0.87985992430000004" blue="0.61710470910000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="PFV-a0-CbF" firstAttribute="bottom" secondItem="xcV-tM-y3r" secondAttribute="bottom" id="Ged-21-ihn"/>
+                            <constraint firstItem="VpA-KZ-I6i" firstAttribute="top" secondItem="xcV-tM-y3r" secondAttribute="top" id="I2S-ha-q7F"/>
                             <constraint firstItem="xcV-tM-y3r" firstAttribute="trailing" secondItem="PFV-a0-CbF" secondAttribute="trailing" constant="20" id="I7O-3M-pra"/>
                             <constraint firstItem="PFV-a0-CbF" firstAttribute="leading" secondItem="xcV-tM-y3r" secondAttribute="leading" constant="20" id="Utv-j8-7pq"/>
                             <constraint firstItem="PFV-a0-CbF" firstAttribute="top" secondItem="xcV-tM-y3r" secondAttribute="top" constant="35" id="dUy-s1-KpE"/>
+                            <constraint firstItem="VpA-KZ-I6i" firstAttribute="leading" secondItem="xcV-tM-y3r" secondAttribute="leading" constant="20" id="fKS-ce-jHb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xcV-tM-y3r"/>
                     </view>

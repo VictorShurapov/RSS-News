@@ -54,17 +54,21 @@ class RealmService {
         try! realm?.write {
             let newArticle = NewsPost()
             
-            guard let title = dataDictionary["title"] else { return }
+            if let title = dataDictionary["title"] {
             newArticle.title = title
+            }
             
-            guard let link = dataDictionary["link"] else { return }
+            if let link = dataDictionary["link"] {
             newArticle.link = link
+            }
             
-            guard let pubDate = dataDictionary["pubDate"] else { return }
+            if let pubDate = dataDictionary["pubDate"] {
             newArticle.pubDate = pubDate
+            }
             
-            guard let imageURL = dataDictionary["media:thumbnail"] else { return }
+            if let imageURL = dataDictionary["media:thumbnail"] {
             newArticle.imageURL = imageURL
+            }
             
             newArticle.newsSource = newsSourceModel
             

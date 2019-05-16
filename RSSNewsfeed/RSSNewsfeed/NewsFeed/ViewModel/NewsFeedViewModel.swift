@@ -22,14 +22,12 @@ class NewsFeedViewModel {
     
     // MARK: - Methods
     func populateDefaultSources() {
-        
-        
-        
+
         if channelList?.count == 0 {
             
             try! realm?.write() {
                 
-                let defaultNewsSources: [(String, String)] = [("Wired", "https://www.wired.com/feed/rss"), ("New Yorker.Daily Cartoon", "https://www.newyorker.com/feed/cartoons/daily-cartoon"), ("Buzzfeed", "https://www.buzzfeed.com/world.xml"), ("Time", "http://feeds.feedburner.com/time/world"), ("NYTimes", "http://rss.nytimes.com/services/xml/rss/nyt/US.xml")]
+                let defaultNewsSources: [(String, String)] = [("Wired", "https://www.wired.com/feed/rss"), ("New Yorker.Daily Cartoon", "https://www.newyorker.com/feed/cartoons/daily-cartoon"), ("Buzzfeed", "https://www.buzzfeed.com/world.xml"), ("Time", "http://feeds.feedburner.com/time/world"), ("NYTimes", "http://rss.nytimes.com/services/xml/rss/nyt/US.xml"), ("Meduza", "https://meduza.io/rss/all"),("SF Gate", "https://www.sfgate.com/bayarea/feed/Bay-Area-News-429.php")]
                 
                 for newsSource in defaultNewsSources {
                     let newSource = NewsSource()
