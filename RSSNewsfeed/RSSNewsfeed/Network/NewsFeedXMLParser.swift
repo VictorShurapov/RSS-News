@@ -50,32 +50,26 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
         
         currentElement = elementName
         
-        if elementName == "media:thumbnail" {
+        if elementName == "media:thumbnail" || elementName == "media:content" || elementName == "enclosure" {
             guard let url = attributeDict["url"] else { return }
             foundCharacters += url
            // currentDataDictionary[currentElement] = foundCharacters
         }
         
-        if elementName == "media:content" {
-            guard let url = attributeDict["url"] else { return }
-            foundCharacters += url
-            //currentDataDictionary["media:thumbnail"] = foundCharacters
-        }
 }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if !foundCharacters.isEmpty {
-            
-            if elementName == "media:thumbnail" || elementName == "media:content" {
+            print("Element: \(elementName), \(foundCharacters)")
+            if elementName == "media:thumbnail" || elementName == "media:content" || elementName == "enclosure" {
                 currentDataDictionary["media:thumbnail"] = foundCharacters
             } else {
                 currentDataDictionary[currentElement] = foundCharacters
             }
-            
             foundCharacters = ""
-            
+        }
             // last element close currentDataDictionary
-            if currentElement == "media:thumbnail" || currentElement == "media:content" {
+            if elementName == "item" { //"media:thumbnail" || currentElement == "media:content" {
                 
             arrParsedData.append(currentDataDictionary)
             newsArray = populateNews()
@@ -83,19 +77,10 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
                 RealmService.service.addNewsFrom(dataDictionary: currentDataDictionary, newsSourceModel: newsModel)
             }
         }
-    }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if currentElement == "title" || currentElement == "pubDate" {
+        if currentElement == "title" || currentElement == "pubDate" || currentElement == "link" {
             foundCharacters += string
-        }
-        
-        if currentElement == "link" {
-            if string.contains("\n") {
-                foundCharacters += (string as NSString).substring(from: 3)
-            } else {
-                foundCharacters += string
-            }
         }
     }
     
