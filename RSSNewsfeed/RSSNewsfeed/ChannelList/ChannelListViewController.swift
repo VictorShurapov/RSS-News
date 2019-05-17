@@ -30,13 +30,14 @@ class ChannelListViewController: UIViewController {
     let viewModel = ChannelListViewModel()
     let realm = RealmService.service.realm
     
-    
     var addNewsTuple = ("", "") {
         didSet {
             writeNewsSourcetoRealm()
         }
     }
     
+    // MARK: - Methods
+
     func writeNewsSourcetoRealm() {
         let newSource = NewsSource()
         newSource.sourceName = addNewsTuple.0
@@ -48,8 +49,7 @@ class ChannelListViewController: UIViewController {
         }
         tableView.reloadData()
     }
-    
-    
+
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showNewsFeed" {
@@ -109,6 +109,32 @@ extension ChannelListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         self.performSegue(withIdentifier: "showNewsFeed", sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return ""
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        
+        if editingStyle == .delete {
+            print("Deleted")
+            
+            guard let channelListChecked = viewModel.channelList else { return }
+
+            let objectToRemove = channelListChecked[indexPath.row]
+            
+            try! realm?.write {
+                    realm?.delete(objectToRemove)
+            }
+            
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 }
 

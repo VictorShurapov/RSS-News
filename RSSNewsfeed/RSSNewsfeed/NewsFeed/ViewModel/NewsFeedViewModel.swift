@@ -41,6 +41,4 @@ class NewsFeedViewModel {
             channelList = RealmService.service.getChannelList()
         }
     }
-    
-
 }

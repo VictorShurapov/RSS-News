@@ -37,7 +37,6 @@ class NewsFeedViewController: UIViewController {
         
         self.navigationItem.title = viewModel.currentChannelName
         
-        xmlSetup()
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         
     }
