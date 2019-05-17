@@ -42,18 +42,29 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sj8-eU-OhB">
+                                                    <rect key="frame" x="0.0" y="0.5" width="200" height="200"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="35"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Ns6-gk-QFb" firstAttribute="centerY" secondItem="Q7J-eE-oIB" secondAttribute="centerY" id="6mr-pL-j5n"/>
                                                 <constraint firstAttribute="bottom" secondItem="KsV-KY-PET" secondAttribute="bottom" constant="11.5" id="8lG-bu-u2J"/>
                                                 <constraint firstItem="Ns6-gk-QFb" firstAttribute="leading" secondItem="Q7J-eE-oIB" secondAttribute="leading" id="8uz-wp-Qa5"/>
+                                                <constraint firstItem="sj8-eU-OhB" firstAttribute="leading" secondItem="Q7J-eE-oIB" secondAttribute="leading" id="BS7-CO-rw3"/>
                                                 <constraint firstAttribute="trailing" secondItem="KsV-KY-PET" secondAttribute="trailing" id="Bc8-xz-A5H"/>
+                                                <constraint firstItem="sj8-eU-OhB" firstAttribute="top" secondItem="Q7J-eE-oIB" secondAttribute="top" constant="0.5" id="LeY-9x-GPJ"/>
                                                 <constraint firstItem="KsV-KY-PET" firstAttribute="top" secondItem="Q7J-eE-oIB" secondAttribute="top" constant="11" id="T14-dz-wCd"/>
+                                                <constraint firstItem="KsV-KY-PET" firstAttribute="leading" secondItem="sj8-eU-OhB" secondAttribute="trailing" constant="8" id="alM-iR-JEF"/>
+                                                <constraint firstAttribute="bottom" secondItem="sj8-eU-OhB" secondAttribute="bottom" id="kG2-lZ-END"/>
                                                 <constraint firstItem="KsV-KY-PET" firstAttribute="leading" secondItem="Ns6-gk-QFb" secondAttribute="trailing" constant="8" id="zze-K6-3Vn"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="newsImage" destination="Ns6-gk-QFb" id="cha-E7-PAF"/>
+                                            <outlet property="newsSourcePlaceholder" destination="sj8-eU-OhB" id="Ltp-si-2gS"/>
                                             <outlet property="newsTitle" destination="KsV-KY-PET" id="vx0-Ua-LUC"/>
                                         </connections>
                                     </tableViewCell>

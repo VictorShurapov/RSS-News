@@ -32,7 +32,12 @@ class ChannelListViewController: UIViewController {
     
     var addNewsTuple = ("", "") {
         didSet {
-            writeNewsSourcetoRealm()
+
+            if !addNewsTuple.0.isEmpty || (addNewsTuple.1 != "https://") {
+                writeNewsSourcetoRealm()
+            } else {
+                self.showAlert(errorTitle: "Add NewsChannel. Please try again.", errorMessage: "All fields are required.")
+            }
         }
     }
     

@@ -165,8 +165,14 @@ extension NewsFeedViewController: UITableViewDataSource {
         
         let url = xmlParser.newsArray[indexPath.row].imageURL
         
-        
-        newsFeedCell.newsImage.kf.setImage(with: URL(string: url))
+        if !url.isEmpty {
+            newsFeedCell.newsImage.kf.setImage(with: URL(string: url))
+        } else {
+            newsFeedCell.newsSourcePlaceholder.isHidden = false
+            newsFeedCell.newsSourcePlaceholder.text = viewModel.currentChannelName
+            newsFeedCell.newsImage.image = UIImage(named: "rss")
+            newsFeedCell.newsImage.alpha = 0.1
+        }
         
         newsFeedCell.newsTitle.text = xmlParser.newsArray[indexPath.row].title
         
