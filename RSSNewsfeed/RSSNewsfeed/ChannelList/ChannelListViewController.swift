@@ -34,27 +34,14 @@ class ChannelListViewController: UIViewController {
         didSet {
 
             if !addNewsTuple.0.isEmpty || (addNewsTuple.1 != "https://") {
-                writeNewsSourcetoRealm()
+                viewModel.writeNewsSourcetoRealm(tuple: addNewsTuple)
+                tableView.reloadData()
             } else {
                 self.showAlert(errorTitle: "Add NewsChannel. Please try again.", errorMessage: "All fields are required.")
             }
         }
     }
     
-    // MARK: - Methods
-
-    func writeNewsSourcetoRealm() {
-        let newSource = NewsSource()
-        newSource.sourceName = addNewsTuple.0
-        newSource.sourceLink = addNewsTuple.1
-        newSource.id = UUID().uuidString
-        
-        try! realm?.write() {
-            realm?.add(newSource)
-        }
-        tableView.reloadData()
-    }
-
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showNewsFeed" {

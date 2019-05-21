@@ -17,6 +17,7 @@ class NewsFeedViewModel {
     var currentNewsSourceModel: NewsSource!
 
     let realm = RealmService.service.realm
+    var xmlParser : NewsFeedXMLParser!
     lazy var channelList: Results<NewsSource>? = RealmService.service.getChannelList()
 
     
@@ -39,6 +40,43 @@ class NewsFeedViewModel {
                 }
             }
             channelList = RealmService.service.getChannelList()
+        }
+    }
+    
+    func xmlSetup() {
+        xmlParser = NewsFeedXMLParser()
+        
+        
+        if currentNewsSourceModel == nil {
+            
+            guard let selectedNewsSourceModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: "Wired") else { return }
+            
+            currentNewsSourceModel = selectedNewsSourceModel
+        }
+        xmlParser.newsModel = currentNewsSourceModel
+    }
+    
+    func xmlParse() {
+        
+        guard let url = URL(string: currentNewsChannelSource) else { return }
+        xmlParser.startParsingWithContentsOfURL(rssURL: url)
+    }
+    
+    func getNewsFromRealm() {
+        guard let news = RealmService.service.getNews() else { return }
+        let sourceName = currentChannelName
+        xmlParser.newsArray = news.filter { $0.newsSource.sourceName == sourceName }
+    }
+    
+    func clearPreviousNews() {
+        guard let news = RealmService.service.getChannelList() else { return }
+        let firstChannelSource = news.first!
+        let newsFromFirstChannelSource = firstChannelSource.news
+        
+        try! realm?.write {
+            for i in newsFromFirstChannelSource {
+                realm?.delete(i)
+            }
         }
     }
 }

@@ -19,11 +19,7 @@ class NewsFeedViewController: UIViewController {
     
     // MARK: - Properties
     let viewModel = NewsFeedViewModel()
-    var xmlParser : NewsFeedXMLParser!
     let networkReachability = NetworkReachability()
-    let realm = RealmService.service.realm
-    var isOffline = false
-    
     
     // MARK: - LoadView
     override func viewDidLoad() {
@@ -63,56 +59,20 @@ class NewsFeedViewController: UIViewController {
     
     // MARK: - Methods
     fileprivate func networkCheck() {
+        
+        // init xml parser and setup current newsModel
+        viewModel.xmlSetup()
+        viewModel.xmlParser.delegate = self
+        
+        // populate tableView with news- new ones or fetched from Realm
         if networkReachability.isNetworkAvailable() {
-            isOffline = false
-            clearPreviousNews()
-            xmlParse()
+            viewModel.clearPreviousNews()
+            viewModel.xmlParse()
         } else {
-            isOffline = true
             self.showAlert(errorTitle: "Network is unavailable", errorMessage: "Please check you connection and select newssource once again.")
-            getNewsFromRealm()
+            viewModel.getNewsFromRealm()
             tableView.reloadData()
         }
-    }
-    
-    fileprivate func clearPreviousNews() {
-        
-        guard let news = RealmService.service.getChannelList() else { return }
-        let firstChannelSource = news.first!
-        let newsFromFirstChannelSource = firstChannelSource.news
-        
-        try! realm?.write {
-            for i in newsFromFirstChannelSource {
-                realm?.delete(i)
-            }
-        }
-    }
-    
-    fileprivate func getNewsFromRealm() {
-        guard let news = RealmService.service.getNews() else { return }
-        let sourceName = viewModel.currentChannelName
-        xmlParser.newsArray = news.filter { $0.newsSource.sourceName == sourceName }
-    }
-    
-    fileprivate func xmlSetup() {
-        xmlParser = NewsFeedXMLParser()
-        xmlParser.delegate = self
-        
-        if viewModel.currentNewsSourceModel == nil {
-            
-                                guard let selectedNewsSourceModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: "Wired") else { return }
-
-            viewModel.currentNewsSourceModel = selectedNewsSourceModel
-        }
-        xmlParser.newsModel = viewModel.currentNewsSourceModel
-    }
-    
-    fileprivate func xmlParse() {
-        
-        guard let url = URL(string: viewModel.currentNewsChannelSource) else { return }
-        
-        xmlSetup()
-        xmlParser.startParsingWithContentsOfURL(rssURL: url)
     }
     
     fileprivate func open(url: String, currentRow: Int) {
@@ -124,7 +84,6 @@ class NewsFeedViewController: UIViewController {
                 // get current item and deselect it
                 let index = IndexPath(row: currentRow, section: 0)
                 self.tableView.deselectRow(at: index, animated: true)
-                
             }
         }
     }
@@ -137,7 +96,7 @@ class NewsFeedViewController: UIViewController {
                 
                 guard let selectedChannelIndex = tableView.indexPathForSelectedRow else { return }
                 
-                let currentNews = xmlParser.newsArray[selectedChannelIndex.row]
+                let currentNews = viewModel.xmlParser.newsArray[selectedChannelIndex.row]
                 
                 let link = currentNews.link
                 webViewController.url = URL(string: link)
@@ -154,15 +113,15 @@ extension NewsFeedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard xmlParser != nil else { return 0 }
-        return xmlParser.newsArray.count
+        guard viewModel.xmlParser != nil else { return 0 }
+        return viewModel.xmlParser.newsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let newsFeedCell = tableView.dequeueReusableCell(withIdentifier: "newsFeedCell") as? NewsFeedTableViewCell else { return UITableViewCell() }
         
-        let url = xmlParser.newsArray[indexPath.row].imageURL
+        let url = viewModel.xmlParser.newsArray[indexPath.row].imageURL
         
         if !url.isEmpty {
             newsFeedCell.newsImage.kf.setImage(with: URL(string: url))
@@ -173,7 +132,7 @@ extension NewsFeedViewController: UITableViewDataSource {
             newsFeedCell.newsImage.alpha = 0.1
         }
         
-        newsFeedCell.newsTitle.text = xmlParser.newsArray[indexPath.row].title
+        newsFeedCell.newsTitle.text = viewModel.xmlParser.newsArray[indexPath.row].title
         
         return newsFeedCell
     }
