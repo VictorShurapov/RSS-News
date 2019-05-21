@@ -32,9 +32,9 @@ class RealmService {
         }
     }
     
-    func getNews() -> Results <NewsPost>? {
+    func getNews() -> [NewsPost]? {
         if let realmChecked = realm {
-            return realmChecked.objects(NewsPost.self)
+            return Array(realmChecked.objects(NewsPost.self))
         } else {
             return nil
         }

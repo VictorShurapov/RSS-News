@@ -90,9 +90,8 @@ class NewsFeedViewController: UIViewController {
     
     fileprivate func getNewsFromRealm() {
         guard let news = RealmService.service.getNews() else { return }
-        let newsArray = Array(news)
         let sourceName = viewModel.currentChannelName
-        xmlParser.newsArray = newsArray.filter { $0.newsSource.sourceName == sourceName }
+        xmlParser.newsArray = news.filter { $0.newsSource.sourceName == sourceName }
     }
     
     fileprivate func xmlSetup() {

@@ -15,13 +15,4 @@ class NewsPost: Object {
     @objc dynamic var pubDate = ""
     @objc dynamic var imageURL = ""
     @objc dynamic var newsSource: NewsSource!
-
-   // @objc dynamic var created = Date()
 }
-
-/*
- Id (UUID)
- Source name
- Source link
- -    News list
- */

@@ -12,7 +12,6 @@ import Network
 class NetworkReachability {
     
     var pathMonitor: NWPathMonitor!
-    var path1: NWPath?
     var pathUpdateHandler: ((NWPath) -> Void) = { path in
         if path.status == NWPath.Status.satisfied {
             print("Connected")

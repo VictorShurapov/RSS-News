@@ -15,8 +15,6 @@ class NewsSource: Object {
     @objc dynamic var sourceLink = ""
     
     let news = LinkingObjects(fromType: NewsPost.self, property: "newsSource")
-
-    //@objc dynamic var newsList = [NewsPost]()
     
     override static func primaryKey() -> String? {
         return "sourceName"
