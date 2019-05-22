@@ -12,7 +12,6 @@ import RealmSwift
 
 class ChannelListViewController: UIViewController {
     
-    
     // MARK: - IBOutlets & IBActions
     @IBOutlet weak var tableView: UITableView!
     @IBAction func addNewsSource(_ sender: Any) {
@@ -28,11 +27,10 @@ class ChannelListViewController: UIViewController {
     
     // MARK: - Properties
     let viewModel = ChannelListViewModel()
-    let realm = RealmService.service.realm
     
     var addNewsTuple = ("", "") {
         didSet {
-
+            
             if !addNewsTuple.0.isEmpty || (addNewsTuple.1 != "https://") {
                 viewModel.writeNewsSourcetoRealm(tuple: addNewsTuple)
                 tableView.reloadData()
@@ -114,22 +112,20 @@ extension ChannelListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        
         if editingStyle == .delete {
             print("Deleted")
             
             guard let channelListChecked = viewModel.channelList else { return }
-
+            
             let objectToRemove = channelListChecked[indexPath.row]
             
-            try! realm?.write {
-                    realm?.delete(objectToRemove)
-            }
+            viewModel.removeObjectFromRealm(objectToRemove)
             
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
 }
+
 
 extension ChannelListViewController {
     func showAlertToAddNewsSourceWith() {
@@ -170,4 +166,3 @@ extension ChannelListViewController {
         self.present(alert, animated: true, completion: nil)
     }
 }
-

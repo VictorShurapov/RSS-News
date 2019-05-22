@@ -26,4 +26,10 @@ class ChannelListViewModel {
             realm?.add(newSource)
         }
     }
+    
+    func removeObjectFromRealm(_ object: NewsSource) {
+        try! realm?.write {
+            realm?.delete(object)
+        }
+    }
 }
