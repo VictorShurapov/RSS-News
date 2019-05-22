@@ -14,16 +14,20 @@ class NewsFeedViewModel {
     // MARK: - Properties
     var currentNewsChannelSource = "https://www.wired.com/feed/rss"
     var currentChannelName = "Wired"
-    var currentNewsSourceModel: NewsSource!
-
+    var currentNewsSourceModel: NewsSource! {
+        didSet {
+            xmlParser.newsModel = currentNewsSourceModel
+        }
+    }
+    
     let realm = RealmService.service.realm
-    var xmlParser : NewsFeedXMLParser!
+    var xmlParser = NewsFeedXMLParser()
     lazy var channelList: Results<NewsSource>? = RealmService.service.getChannelList()
-
+    
     
     // MARK: - Methods
     func populateDefaultSources() {
-
+        
         if channelList?.count == 0 {
             
             try! realm?.write() {
@@ -41,19 +45,13 @@ class NewsFeedViewModel {
             }
             channelList = RealmService.service.getChannelList()
         }
-    }
-    
-    func xmlSetup() {
-        xmlParser = NewsFeedXMLParser()
         
-        
-        if currentNewsSourceModel == nil {
-            
-            guard let selectedNewsSourceModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: "Wired") else { return }
-            
-            currentNewsSourceModel = selectedNewsSourceModel
+        // get default first newsModel if it's nil
+        if xmlParser.newsModel == nil {
+            if let defaultNewsModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: currentChannelName) {
+                currentNewsSourceModel = defaultNewsModel
+            }
         }
-        xmlParser.newsModel = currentNewsSourceModel
     }
     
     func xmlParse() {
@@ -62,21 +60,24 @@ class NewsFeedViewModel {
         xmlParser.startParsingWithContentsOfURL(rssURL: url)
     }
     
-    func getNewsFromRealm() {
-        guard let news = RealmService.service.getNews() else { return }
-        let sourceName = currentChannelName
-        xmlParser.newsArray = news.filter { $0.newsSource.sourceName == sourceName }
-    }
-    
     func clearPreviousNews() {
-        guard let news = RealmService.service.getChannelList() else { return }
-        let firstChannelSource = news.first!
-        let newsFromFirstChannelSource = firstChannelSource.news
+        let news = getNewsFromRealm()
         
         try! realm?.write {
-            for i in newsFromFirstChannelSource {
+            for i in news {
                 realm?.delete(i)
             }
         }
+    }
+    
+    func getNewsFromRealm() -> [NewsPost] {
+        guard let news = RealmService.service.getNews() else { return [NewsPost]() }
+        let sourceName = currentChannelName
+        let newsForCurrentChannel = news.filter { $0.newsSource.sourceName == sourceName }
+        return newsForCurrentChannel
+    }
+    
+    func populateNewsArray() {
+        xmlParser.newsArray = getNewsFromRealm()
     }
 }

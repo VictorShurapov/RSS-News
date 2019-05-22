@@ -53,7 +53,6 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
         if elementName == "media:thumbnail" || elementName == "media:content" || elementName == "enclosure" {
             guard let url = attributeDict["url"] else { return }
             foundCharacters += url
-           // currentDataDictionary[currentElement] = foundCharacters
         }
         
 }
@@ -69,7 +68,7 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             foundCharacters = ""
         }
             // last element close currentDataDictionary
-            if elementName == "item" { //"media:thumbnail" || currentElement == "media:content" {
+            if elementName == "item" {
                 
             arrParsedData.append(currentDataDictionary)
             newsArray = populateNews()

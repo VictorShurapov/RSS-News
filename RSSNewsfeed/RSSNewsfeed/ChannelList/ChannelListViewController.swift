@@ -59,6 +59,7 @@ class ChannelListViewController: UIViewController {
                     
                     guard let selectedNewsSourceModel = RealmService.service.getChannelSourceModelFor(selectedChannelName: selectedChannelName) else { return }
                     newsFeedViewController.viewModel.currentNewsSourceModel = selectedNewsSourceModel
+                    
                 }
             }
         }

@@ -24,6 +24,9 @@ class NewsFeedViewController: UIViewController {
     // MARK: - LoadView
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.xmlParser.delegate = self
+        
         viewModel.populateDefaultSources()
         
         // Navigation
@@ -59,18 +62,14 @@ class NewsFeedViewController: UIViewController {
     
     // MARK: - Methods
     fileprivate func networkCheck() {
-        
-        // init xml parser and setup current newsModel
-        viewModel.xmlSetup()
-        viewModel.xmlParser.delegate = self
-        
         // populate tableView with news- new ones or fetched from Realm
         if networkReachability.isNetworkAvailable() {
             viewModel.clearPreviousNews()
             viewModel.xmlParse()
+            
         } else {
             self.showAlert(errorTitle: "Network is unavailable", errorMessage: "Please check you connection and select newssource once again.")
-            viewModel.getNewsFromRealm()
+            viewModel.populateNewsArray()
             tableView.reloadData()
         }
     }
@@ -113,7 +112,6 @@ extension NewsFeedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard viewModel.xmlParser != nil else { return 0 }
         return viewModel.xmlParser.newsArray.count
     }
     

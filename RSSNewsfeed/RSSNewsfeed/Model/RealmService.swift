@@ -13,8 +13,6 @@ class RealmService {
     
     static let service = RealmService()
     
-    //let realm = try! Realm()
-    
      var realm: Realm? {
         do {
             return try Realm()
@@ -39,8 +37,7 @@ class RealmService {
             return nil
         }
     }
-    
-    
+
     func getChannelSourceModelFor(selectedChannelName: String) -> NewsSource? {
         if let realmChecked = realm {
             return realmChecked.object(ofType: NewsSource.self, forPrimaryKey: selectedChannelName)
