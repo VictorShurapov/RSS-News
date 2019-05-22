@@ -11,6 +11,7 @@ import RealmSwift
 
 class RealmService {
     
+    // MARK: - Properties
     static let service = RealmService()
     
     var realm: Realm? {
@@ -22,6 +23,7 @@ class RealmService {
         }
     }
     
+    // MARK: - Get From Realm
     func getChannelList() -> Results <NewsSource>? {
         if let realmChecked = realm {
             return realmChecked.objects(NewsSource.self)
@@ -46,6 +48,8 @@ class RealmService {
         }
     }
     
+    // MARK: - Add To Realm
+
     func addNewsFrom(dataDictionary: [String: String], newsSourceModel:  NewsSource) {
         
         try! realm?.write {
@@ -73,5 +77,34 @@ class RealmService {
         }
     }
     
+    func writeNewsSourceFrom(tuple: (String, String)) {
+        let newSource = NewsSource()
+        newSource.sourceName = tuple.0
+        newSource.sourceLink = tuple.1
+        newSource.id = UUID().uuidString
+        
+        add(object: newSource)
+    }
+    
+    func add(object: NewsSource) {
+        
+        try! realm?.write() {
+            realm?.add(object)
+        }
+    }
+    
+    // MARK: - Remove From Realm
+
+    func remove(object: NewsSource) {
+        try! realm?.write {
+            realm?.delete(object)
+        }
+    }
+    
+    func remove(object: NewsPost) {
+        try! realm?.write {
+            realm?.delete(object)
+        }
+    }
     
 }

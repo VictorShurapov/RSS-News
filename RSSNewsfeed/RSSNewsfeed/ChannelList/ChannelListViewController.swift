@@ -32,7 +32,7 @@ class ChannelListViewController: UIViewController {
         didSet {
             
             if !addNewsTuple.0.isEmpty || (addNewsTuple.1 != "https://") {
-                viewModel.writeNewsSourcetoRealm(tuple: addNewsTuple)
+                viewModel.writeNewsSourcetoRealmFrom(tuple: addNewsTuple)
                 tableView.reloadData()
             } else {
                 self.showAlert(errorTitle: "Add NewsChannel. Please try again.", errorMessage: "All fields are required.")
