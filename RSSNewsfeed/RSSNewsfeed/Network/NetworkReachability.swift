@@ -31,10 +31,10 @@ class NetworkReachability {
     }
     
     func isNetworkAvailable() -> Bool {
-            if pathMonitor.currentPath.status == NWPath.Status.satisfied {
-                return true
-            } else {
-                return false
+        if pathMonitor.currentPath.status == NWPath.Status.satisfied {
+            return true
+        } else {
+            return false
         }
     }
 }

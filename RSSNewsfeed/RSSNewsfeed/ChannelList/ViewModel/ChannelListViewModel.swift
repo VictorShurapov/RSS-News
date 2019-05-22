@@ -10,11 +10,11 @@ import UIKit
 import RealmSwift
 
 class ChannelListViewModel {
-
+    
     // MARK: - Properties
     let realm = RealmService.service.realm
     lazy var channelList: Results<NewsSource>? = RealmService.service.getChannelList()
-
+    
     // MARK: - Methods
     func writeNewsSourcetoRealm(tuple: (String, String)) {
         let newSource = NewsSource()

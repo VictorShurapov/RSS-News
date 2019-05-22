@@ -5,12 +5,12 @@
     //  Created by Viktor S on 5/2/19.
     //  Copyright © 2019 Viktor S. All rights reserved.
     //
-
+    
     import UIKit
     import SWRevealViewController
     import Kingfisher
     import RealmSwift
-
+    
     class NewsFeedViewController: UIViewController {
         
         // MARK: - IBOutlets & IBActions
@@ -103,7 +103,7 @@
             }
         }
     }
-
+    
     // MARK: - UITableViewDataSource Methods
     extension NewsFeedViewController: UITableViewDataSource {
         
@@ -135,7 +135,7 @@
             return newsFeedCell
         }
     }
-
+    
     // MARK: - UITableViewDelegate Methods
     extension NewsFeedViewController: UITableViewDelegate {
         
@@ -147,7 +147,7 @@
             performSegue(withIdentifier: "showWebView", sender: nil)
         }
     }
-
+    
     extension NewsFeedViewController: NewsFeedXMLParserDelegate {
         func parsingWasFinished() {
             self.tableView.reloadData()

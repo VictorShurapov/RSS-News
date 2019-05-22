@@ -12,6 +12,7 @@ import RealmSwift
 class NewsFeedViewModel {
     
     // MARK: - Properties
+    
     var currentNewsChannelSource = "https://www.wired.com/feed/rss"
     var currentChannelName = "Wired"
     var currentNewsSourceModel: NewsSource! {
@@ -26,6 +27,7 @@ class NewsFeedViewModel {
     
     
     // MARK: - Methods
+    
     func populateDefaultSources() {
         
         if channelList?.count == 0 {

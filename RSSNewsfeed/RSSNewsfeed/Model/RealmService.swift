@@ -13,7 +13,7 @@ class RealmService {
     
     static let service = RealmService()
     
-     var realm: Realm? {
+    var realm: Realm? {
         do {
             return try Realm()
         } catch let error {
@@ -37,7 +37,7 @@ class RealmService {
             return nil
         }
     }
-
+    
     func getChannelSourceModelFor(selectedChannelName: String) -> NewsSource? {
         if let realmChecked = realm {
             return realmChecked.object(ofType: NewsSource.self, forPrimaryKey: selectedChannelName)
@@ -45,26 +45,26 @@ class RealmService {
             return nil
         }
     }
-
-     func addNewsFrom(dataDictionary: [String: String], newsSourceModel:  NewsSource) {
+    
+    func addNewsFrom(dataDictionary: [String: String], newsSourceModel:  NewsSource) {
         
         try! realm?.write {
             let newArticle = NewsPost()
             
             if let title = dataDictionary["title"] {
-            newArticle.title = title
+                newArticle.title = title
             }
             
             if let link = dataDictionary["link"] {
-            newArticle.link = link
+                newArticle.link = link
             }
             
             if let pubDate = dataDictionary["pubDate"] {
-            newArticle.pubDate = pubDate
+                newArticle.pubDate = pubDate
             }
             
             if let imageURL = dataDictionary["media:thumbnail"] {
-            newArticle.imageURL = imageURL
+                newArticle.imageURL = imageURL
             }
             
             newArticle.newsSource = newsSourceModel
@@ -72,6 +72,6 @@ class RealmService {
             realm?.add(newArticle)
         }
     }
-
+    
     
 }

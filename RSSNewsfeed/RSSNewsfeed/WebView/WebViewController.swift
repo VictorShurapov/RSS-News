@@ -11,6 +11,7 @@ import WebKit
 
 class WebViewController: UIViewController, WKNavigationDelegate {
     
+    // MARK: - IBOutlets & IBActions
     
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -34,8 +35,8 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         
         // Add reply button for WebView
         let backButton = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(WebViewController.actionGoBack(sender:)))
-
-            navigationItem.rightBarButtonItem = backButton
+        
+        navigationItem.rightBarButtonItem = backButton
     }
     
     @objc func actionGoBack(sender: UIBarButtonItem) {

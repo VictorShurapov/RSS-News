@@ -55,7 +55,7 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             foundCharacters += url
         }
         
-}
+    }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if !foundCharacters.isEmpty {
@@ -67,15 +67,15 @@ class NewsFeedXMLParser: NSObject, XMLParserDelegate {
             }
             foundCharacters = ""
         }
-            // last element close currentDataDictionary
-            if elementName == "item" {
-                
+        // last element close currentDataDictionary
+        if elementName == "item" {
+            
             arrParsedData.append(currentDataDictionary)
             newsArray = populateNews()
-                
-                RealmService.service.addNewsFrom(dataDictionary: currentDataDictionary, newsSourceModel: newsModel)
-            }
+            
+            RealmService.service.addNewsFrom(dataDictionary: currentDataDictionary, newsSourceModel: newsModel)
         }
+    }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         if currentElement == "title" || currentElement == "pubDate" || currentElement == "link" {
